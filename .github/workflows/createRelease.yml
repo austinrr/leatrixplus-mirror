@@ -36,3 +36,21 @@ jobs:
         env:
           LATEST_FILE_NAME: ${{ steps.get_latest_zip.outputs.LATEST_FILE_NAME }}
         run: echo "The latest file is $LATEST_FILE_NAME"
+
+      - name: Unzip Addon Package
+        id: unzip_addon_pkg
+        run: |
+          unzip $LATEST_FILE_NAME
+
+      - name: Get Interface Version Number
+        id: get_interface_version_num
+        run: |
+          cd $LATEST_FILE_NAME
+          echo "INTERFACE_VERSION_NUM=$(cat *.toc | sed -n -E -e 's/^## Interface: ([0-9]+).*/\1/p')" >> "$GITHUB_OUTPUT"
+
+      - name: Test Print Version Number
+        run: echo "${{ steps.get_latest_zip.outputs.INTERFACE_VERSION_NUM }}"
+
+          
+          
+          
