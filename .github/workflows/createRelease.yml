@@ -28,10 +28,11 @@ jobs:
       
       - name: Get Latest Zip
         id: get_latest_zip
-        run: echo "::set-output name=latest_file_name::$(ls -rt *.zip | head -1)"
+        run: echo "LATEST_FILE_NAME=$(ls -rt *.zip | head -1)" >> "$GITHUB_ENV"
+        #run: echo "::set-output name=latest_file_name::$(ls -rt *.zip | head -1)"
 
       # Runs a set of commands using the runners shell
       - name: Use Latest Zip
         run: |
           echo The lastest zip is,
-          echo ${{ steps.get_latest_zip.outputs.latest_file_name }}
+          echo "${{ steps.get_latest_zip.outputs.LATEST_FILE_NAME }}"
