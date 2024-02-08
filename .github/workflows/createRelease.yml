@@ -45,10 +45,28 @@ jobs:
         id: get_interface_version_num
         run: |
           cd Leatrix_Plus/
-          echo "INTERFACE_VERSION_NUM=$(cat *.toc | sed -n -E -e 's/^## Interface: ([0-9]+).*/\1/p')" >> "$GITHUB_OUTPUT"
+          echo "get_interface_version_num=$(cat *.toc | sed -n -E -e 's/^## Interface: ([0-9]+).*/\1/p')" >> "$GITHUB_OUTPUT"
 
-      - name: Test Print Version Number
-        run: echo "${{ steps.get_interface_version_num.outputs.INTERFACE_VERSION_NUM }}"
+      - name: Set filename in release.json
+        uses: jossef/action-set-json-field@v2.1
+        with:
+          file: release.json
+          field: releases[0].filename
+          value: ${{ steps.get_latest_zip.outputs.LATEST_FILE_NAME }}
+
+      - name: Set interface in release.json
+        uses: jossef/action-set-json-field@v2.1
+        with:
+          file: releases[0].metadata[0].interface
+          field: interface
+          value: ${{ steps.get_interface_version_num.outputs.get_interface_version_num }}
+
+      - name: Test Read release.json
+        run: cat release.json
+
+        
+        
+            
 
           
           
