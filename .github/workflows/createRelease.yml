@@ -51,13 +51,13 @@ jobs:
         uses: jossef/action-set-json-field@v2.1
         with:
           file: release.json
-          field: releases[0].filename
+          field: releases.filename
           value: ${{ steps.get_latest_zip.outputs.LATEST_FILE_NAME }}
 
       - name: Set interface in release.json
         uses: jossef/action-set-json-field@v2.1
         with:
-          file: releases[0].metadata[0].interface
+          file: releases.metadata.interface
           field: interface
           value: ${{ steps.get_interface_version_num.outputs.get_interface_version_num }}
 
