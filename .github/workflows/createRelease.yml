@@ -39,8 +39,7 @@ jobs:
 
       - name: Unzip Addon Package
         id: unzip_addon_pkg
-        run: |
-          unzip $LATEST_FILE_NAME
+        run: unzip ${{ steps.get_latest_zip.outputs.LATEST_FILE_NAME }}
 
       - name: Get Interface Version Number
         id: get_interface_version_num
