@@ -49,7 +49,7 @@ jobs:
           echo "INTERFACE_VERSION_NUM=$(cat *.toc | sed -n -E -e 's/^## Interface: ([0-9]+).*/\1/p')" >> "$GITHUB_OUTPUT"
 
       - name: Test Print Version Number
-        run: echo "${{ steps.get_latest_zip.outputs.INTERFACE_VERSION_NUM }}"
+        run: echo "${{ steps.get_interface_version_num.outputs.INTERFACE_VERSION_NUM }}"
 
           
           
