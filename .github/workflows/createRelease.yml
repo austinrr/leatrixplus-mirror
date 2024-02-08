@@ -57,8 +57,8 @@ jobs:
       - name: Set interface in release.json
         uses: jossef/action-set-json-field@v2.1
         with:
-          file: releases.metadata.interface
-          field: interface
+          file: release.json
+          field: releases.metadata.interface
           value: ${{ steps.get_interface_version_num.outputs.get_interface_version_num }}
 
       - name: Test Read release.json
