@@ -28,10 +28,10 @@ jobs:
       
       - name: Get Latest Zip
         id: get_latest_zip
-        run: echo "::set-output name=file_name::$(ls -Art | tail -n 1)"
+        run: echo "::set-output name=latest_file_name::$(ls -rt *.zip | head -1)"
 
       # Runs a set of commands using the runners shell
       - name: Use Latest Zip
         run: |
           echo The lastest zip is,
-          echo ${{ steps.get_latest_zip.outputs.file_name }}
+          echo ${{ steps.get_latest_zip.outputs.latest_file_name }}
