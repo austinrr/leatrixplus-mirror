@@ -29,7 +29,6 @@ jobs:
       - name: Get Latest Zip
         id: get_latest_zip
         run: echo "LATEST_FILE_NAME=$(ls -rt *.zip | head -1)" >> "$GITHUB_OUTPUT"
-        #run: echo "::set-output name=latest_file_name::$(ls -rt *.zip | head -1)"
 
       # Runs a set of commands using the runners shell
       - name: Use Latest Zip
@@ -76,9 +75,8 @@ jobs:
 
       - name: cUrl Curseforge
         run: |
-          response=$(curl -sb -H "Accept: application/json" "https://www.curseforge.com/api/v1/mods/322362/files?pageIndex=0&pageSize=10&sort=dateCreated&sortDescending=true&gameFlavorId=67408&removeAlphas=true")
-          echo $response
-      # echo '${{ fromJson($response).data[0] }}'
+          echo "RESPONE=$(curl -sb -H 'Accept: application/json' 'https://www.curseforge.com/api/v1/mods/322362/files?pageIndex=0&pageSize=10&sort=dateCreated&sortDescending=true&gameFlavorId=67408&removeAlphas=true')" >> $GITHUB_ENV
+          echo '${{ fromJson(env.RESPONSE).data[0] }}'
           
           
 
