@@ -76,12 +76,17 @@ jobs:
       - name: cUrl Curseforge
         id: curl-curseforge
         run: |
-          {
-            echo "response=<<EOF"
-            curl -sb -H 'Accept: application/json' 'https://www.curseforge.com/api/v1/mods/322362/files?pageIndex=0&pageSize=10&sort=dateCreated&sortDescending=true&gameFlavorId=67408&removeAlphas=true' \
-              | jq '.'
-            echo "EOF"
-          } >> "$GITHUB_OUTPUT"
+            echo "response=${curl -sb -H 'Accept: application/json' 'https://www.curseforge.com/api/v1/mods/322362/files?pageIndex=0&pageSize=10&sort=dateCreated&sortDescending=true&gameFlavorId=67408&removeAlphas=true'} >> $GITHUB_ENV 
+
+     # - name: cUrl Curseforge
+      #  id: curl-curseforge
+      #  run: |
+      #    {
+       #     echo "response=<<EOF"
+        #    curl -sb -H 'Accept: application/json' 'https://www.curseforge.com/api/v1/mods/322362/files?pageIndex=0&pageSize=10&sort=dateCreated&sortDescending=true&gameFlavorId=67408&removeAlphas=true' \
+         #     | jq '.'
+          #  echo "EOF"
+         # } >> "$GITHUB_OUTPUT"
 
       - name: test cUrl Curseforge
         run: echo "${{ steps.curl-curseforge.outputs.response }}"
