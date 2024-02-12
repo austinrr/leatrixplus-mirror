@@ -72,7 +72,7 @@ jobs:
           out-file-path: "previous-release"
 
       - name: Test Read Previous Rlease
-        run: cat previous-relase/release.json
+        run: cat previous-release/release.json
           
 
         
