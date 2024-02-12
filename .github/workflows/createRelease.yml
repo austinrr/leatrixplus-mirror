@@ -78,7 +78,8 @@ jobs:
           echo "JSON_RESPONSE<<EOF" >> $GITHUB_ENV
           curl -sb -H 'Accept: application/json' 'https://www.curseforge.com/api/v1/mods/322362/files?pageIndex=0&pageSize=10&sort=dateCreated&sortDescending=true&gameFlavorId=67408&removeAlphas=true' >> GITHUB_ENV
           echo "EOF" >> $GITHUB_ENV
-          echo "latest_release_json=${{ fromJson(env.JSON_RESPONSE).data[0] }}"
+          echo "{{ env.JSON_RESPONSE }}"
+        # echo "latest_release_json=${{ fromJson(env.JSON_RESPONSE).data[0] }}"
           
 
         
