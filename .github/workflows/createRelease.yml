@@ -64,6 +64,17 @@ jobs:
       - name: Test Read release.json
         run: cat release.json
 
+      - name: Get Last Release
+        uses: robinraju/release-downloader@v1.9
+        with:
+          latest: true
+          filename: release.json
+          out-file-path: "previous-release"
+
+      - name: Test Read Previous Rlease
+        run: cat previous-relase/release.json
+          
+
         
         
             
