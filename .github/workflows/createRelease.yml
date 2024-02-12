@@ -74,11 +74,26 @@ jobs:
         run: cat previous-release/release.json
 
       - name: cUrl Curseforge
+        id: curl-curseforge
         run: |
-          echo "JSON_RESPONSE<<EOF" >> $GITHUB_ENV
-          curl -sb -H 'Accept: application/json' 'https://www.curseforge.com/api/v1/mods/322362/files?pageIndex=0&pageSize=10&sort=dateCreated&sortDescending=true&gameFlavorId=67408&removeAlphas=true' >> GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV
-          echo "{{ env.JSON_RESPONSE }}"
+          {
+            echo "response=<<EOF"
+            curl -s -H 'Accept: application/json' 'https://www.curseforge.com/api/v1/mods/322362/files?pageIndex=0&pageSize=10&sort=dateCreated&sortDescending=true&gameFlavorId=67408&removeAlphas=true' \
+              | jq -r 'response'
+            echo "EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: test cUrl Curseforge
+        run: echo "${{ steps.curl-curseforge.outputs.response }}"
+
+          
+          
+   #   - name: cUrl Curseforge
+    #    run: |
+     #     echo "JSON_RESPONSE<<EOF" >> $GITHUB_ENV
+      #    curl -sb -H 'Accept: application/json' 'https://www.curseforge.com/api/v1/mods/322362/files?pageIndex=0&pageSize=10&sort=dateCreated&sortDescending=true&gameFlavorId=67408&removeAlphas=true' >> GITHUB_ENV
+       #   echo "EOF" >> $GITHUB_ENV
+        #  echo "{{ env.JSON_RESPONSE }}"
         # echo "latest_release_json=${{ fromJson(env.JSON_RESPONSE).data[0] }}"
           
 
