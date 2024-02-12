@@ -71,8 +71,14 @@ jobs:
           filename: release.json
           out-file-path: "previous-release"
 
-      - name: Test Read Previous Rlease
+      - name: Test Read Previous Release
         run: cat previous-release/release.json
+
+      - name: cUrl Curseforge
+        run: |
+          output=$(curl "https://www.curseforge.com/api/v1/mods/322362/files?pageIndex=0&pageSize=10&sort=dateCreated&sortDescending=true&gameFlavorId=67408&removeAlphas=true")
+          echo $output
+          
           
 
         
