@@ -76,8 +76,8 @@ jobs:
 
       - name: cUrl Curseforge
         run: |
-          output=$(curl -sb -H "Accept: application/json" "https://www.curseforge.com/api/v1/mods/322362/files?pageIndex=0&pageSize=10&sort=dateCreated&sortDescending=true&gameFlavorId=67408&removeAlphas=true")
-          echo '${{ fromJson(output).data[0] }}'
+          response=$(curl -sb -H "Accept: application/json" "https://www.curseforge.com/api/v1/mods/322362/files?pageIndex=0&pageSize=10&sort=dateCreated&sortDescending=true&gameFlavorId=67408&removeAlphas=true")
+          echo '${{ fromJson($response).data[0] }}'
           
           
 
