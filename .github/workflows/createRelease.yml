@@ -78,8 +78,8 @@ jobs:
         run: |
           {
             echo "response=<<EOF"
-            curl -s -H 'Accept: application/json' 'https://www.curseforge.com/api/v1/mods/322362/files?pageIndex=0&pageSize=10&sort=dateCreated&sortDescending=true&gameFlavorId=67408&removeAlphas=true' \
-              | jq -r 'response'
+            curl -sb -H 'Accept: application/json' 'https://www.curseforge.com/api/v1/mods/322362/files?pageIndex=0&pageSize=10&sort=dateCreated&sortDescending=true&gameFlavorId=67408&removeAlphas=true' \
+              | jq -r 'response.data'
             echo "EOF"
           } >> "$GITHUB_OUTPUT"
 
