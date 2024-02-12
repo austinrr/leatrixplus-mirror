@@ -75,10 +75,10 @@ jobs:
 
       - name: cUrl Curseforge
         run: |
-          echo "JSON_RESPONSE<<EOF" >> $GITHUB_OUTPUT
-          curl -sb -H 'Accept: application/json' 'https://www.curseforge.com/api/v1/mods/322362/files?pageIndex=0&pageSize=10&sort=dateCreated&sortDescending=true&gameFlavorId=67408&removeAlphas=true' >> GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
-          
+          echo "JSON_RESPONSE<<EOF" >> $GITHUB_ENV
+          curl -sb -H 'Accept: application/json' 'https://www.curseforge.com/api/v1/mods/322362/files?pageIndex=0&pageSize=10&sort=dateCreated&sortDescending=true&gameFlavorId=67408&removeAlphas=true' >> GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+          echo "latest_release_json=${{ fromJson(env.JSON_RESPONSE).data[0] }}"
           
 
         
