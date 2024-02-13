@@ -76,14 +76,13 @@ jobs:
       - name: cUrl Curseforge
         id: curl-curseforge
         run: |
-          echo "response<<EOF" >> $GITHUB_OUTPUT
-          curl -H 'Accept: application/json' \
+          curl -Ho 'Accept: application/json' \
             'https://www.curseforge.com/api/v1/mods/322362/files?pageIndex=0&pageSize=10&sort=dateCreated&sortDescending=true&gameFlavorId=67408&removeAlphas=true' \
-            >> "$GITHUB_OUTPUT"
-          echo "EOF" >> $GITHUB_OUTPUT
+            curse-response.json
 
       - name: test cUrl Curseforge
-        run: echo "${{ steps.curl-curseforge.outputs.response }}"
+        run: cat curse-response.json
+       # run: echo "${{ steps.curl-curseforge.outputs.response }}"
 
           
           
