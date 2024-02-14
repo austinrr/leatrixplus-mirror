@@ -73,7 +73,6 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
-      - uses: ncipollo/release-action@v1
       
       - name: Test
         run: |
@@ -128,14 +127,14 @@ jobs:
       CURSE_FILENAME: ${{ needs.collect-version-information.outputs.CURSE_FILENAME }}
 
     steps:
+      - uses: actions/checkout@v3
+    
       - name: Make Tag
         id: make-tag
         run: echo "tag=v$(echo $CURSE_FILENAME | sed 's/.*-\(.*\)-.*/\1/')" >> "GITHUB_OUTPUT"
         
       - name: Make Release
-        uses:
-          actions/checkout@v3
-          ncipollo/release-action@v1
+        uses: ncipollo/release-action@v1
         with:
           artifacts: "${CURSE_FILENAME},release.json"
           tag: ${{ steps.make-tag.outputs.tag }}
