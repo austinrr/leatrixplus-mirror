@@ -142,6 +142,7 @@ jobs:
         run: |
           echo Filename $CURSE_FILENAME
           echo Tag ${{ steps.make-tag.outputs.tag }}
+          ls
         
       - name: Make Release
         uses: ncipollo/release-action@v1
