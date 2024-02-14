@@ -82,8 +82,11 @@ jobs:
         if: ${{ env.MY_FILENAME != env.CURSE_FILENAME }}
         run: |
           echo "New version detected! $CURSE_FILENAME"
-          curl https://www.curseforge.com/wow/addons/leatrix-plus-classic/files/${CURSE_FILEID} -o ${CURSE_FILENAME}.zip
+          curl -O https://mediafilez.forgecdn.net/files/${CURSE_FILEID:0:4}/${CURSE_FILEID:4:3}/${CURSE_FILENAME}.zip
 
+      - name: LS
+        run: ls
+      
       - name: Unzip Addon Package
         id: unzip_addon_pkg
         if: ${{ env.MY_FILENAME != env.CURSE_FILENAME }}
