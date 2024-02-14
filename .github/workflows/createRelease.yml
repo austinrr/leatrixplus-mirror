@@ -146,7 +146,7 @@ jobs:
       - name: Make Release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "${{ env.CURSE_FILENAME }},release.json"
+          artifacts: "${{ env.CURSE_FILENAME }}.zip,release.json"
           tag: ${{ steps.make-tag.outputs.tag }}
           draft: true
           
