@@ -136,7 +136,7 @@ jobs:
         id: make-tag
         run: |
           version=$(echo $CURSE_FILENAME | sed 's/.*-\(.*\)-.*/\1/')
-          echo "tag=v$version" >> "$GITHUB_OUTPUT"
+          echo "tag=v${version}-classic" >> "$GITHUB_OUTPUT"
 
       - name: Test
         run: |
@@ -146,7 +146,7 @@ jobs:
       - name: Make Release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: "${env.CURSE_FILENAME},release.json"
+          artifacts: "${{ env.CURSE_FILENAME }},release.json"
           tag: ${{ steps.make-tag.outputs.tag }}
           draft: true
           
