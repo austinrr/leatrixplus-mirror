@@ -25,45 +25,14 @@ jobs:
       CURSE_FILENAME: ${{ steps.curl-curseforge.outputs.latest_curse_filename }}
       CURSE_FILEID: ${{ steps.curl-curseforge.outputs.latest_curse_fileid }}
         
-    # Steps represent a sequence of tasks that will be executed as part of the job
+    # Get Version of Last Release
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
-      # Runs a single command using the runners shell
       
       - name: Get Latest Zip
         id: get_latest_zip
         run: echo "LATEST_FILE_NAME=$(ls -rt *.zip | head -1)" >> "$GITHUB_OUTPUT"
-
-      # Runs a set of commands using the runners shell
-      - name: Use Latest Zip
-        env:
-          LATEST_FILE_NAME: ${{ steps.get_latest_zip.outputs.LATEST_FILE_NAME }}
-        run: echo "The latest file is $LATEST_FILE_NAME"
-
-      - name: Unzip Addon Package
-        id: unzip_addon_pkg
-        run: unzip ${{ steps.get_latest_zip.outputs.LATEST_FILE_NAME }}
-
-      - name: Get Interface Version Number
-        id: get_interface_version_num
-        run: |
-          cd Leatrix_Plus/
-          echo "get_interface_version_num=$(cat *.toc | sed -n -E -e 's/^## Interface: ([0-9]+).*/\1/p')" >> "$GITHUB_OUTPUT"
-
-      - name: Set filename in release.json
-        uses: jossef/action-set-json-field@v2.1
-        with:
-          file: release.json
-          field: releases.filename
-          value: ${{ steps.get_latest_zip.outputs.LATEST_FILE_NAME }}
-
-      - name: Set interface in release.json
-        uses: jossef/action-set-json-field@v2.1
-        with:
-          file: release.json
-          field: releases.metadata.interface
-          value: ${{ steps.get_interface_version_num.outputs.get_interface_version_num }}
 
       - name: Get Previous Release JSON Asset
         uses: robinraju/release-downloader@v1.9
@@ -86,8 +55,8 @@ jobs:
           fileNameFixed=${fileNameRaw%.*}
           echo "latest_curse_fileid=$(cat curse-response.json | jq -r '.data[0].id')" >> "$GITHUB_OUTPUT"
           echo "latest_curse_filename=${fileNameFixed}" >> "$GITHUB_OUTPUT"
-  
 
+  # Download Job
   download-newer-version:
     name: Download Newer Verion from CurseForge
     needs: collect-version-information
@@ -118,7 +87,7 @@ jobs:
       - name: Unzip Addon Package
         id: unzip_addon_pkg
         if: ${{ env.MY_FILENAME != env.CURSE_FILENAME }}
-        run: unzip "${env.CURSE_FILENAME}.zip"
+        run: unzip ${env.CURSE_FILENAME}.zip
 
       - name: Get Interface Version Number
         id: get_interface_version_num
