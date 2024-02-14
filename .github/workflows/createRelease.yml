@@ -89,8 +89,8 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      CURSE_FILENAME: ${{ steps.curl-curseforge.outputs.latest_curse_filename }}
-      CURSE_FILE_ID: ${{ steps.curl-curseforge.outputs.latest_curse_fileid }}
+      CURSE_FILENAME: ${{ needs.collect-version-information.outputs.latest_curse_filename }}
+      CURSE_FILE_ID: ${{ needs.collect-version-information.outputs.latest_curse_fileid }}
       
     if: ${{ env.CURSE_FILENAME != env.MY_FILENAME }}
 
