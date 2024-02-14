@@ -81,17 +81,26 @@ jobs:
           fileNameFixed=${fileNameRaw%.*}
           echo "latest_curse_fileid=$(cat curse-response.json | jq -r '.data[0].id')" >> "$GITHUB_OUTPUT"
           echo "latest_curse_filename=${fileNameFixed}" >> "$GITHUB_OUTPUT"
-          echo $latest_curse_fileid
-          echo $latest_curse_filename
   
 
+  download-newer-version:
+    name: Download Newer Verion from CurseForge
+    needs: collect-version-information
+    runs-on: ubuntu-latest
+
+    env:
+      CURSE_FILENAME: ${{ steps.curl-curseforge.outputs.latest_curse_filename }}
+      CURSE_FILE_ID: ${{ steps.curl-curseforge.outputs.latest_curse_fileid }}
+      
+    if: ${{ env.CURSE_FILENAME != env.MY_FILENAME }}
+
+    steps:
       - name: Download Newer Version from Curse
         id: donwload-newer-version
-        env:
-          CURSE_FILENAME: ${{ steps.curl-curseforge.outputs.latest_curse_filename }}
-          MY_FILENAME: ${{ steps.set-envvar-prev-release.outputs.prev-release-filename }}
-        if: ${{ env.CURSE_FILENAME != env.MY_FILENAME }}
-        run: echo "new version detected"
+        run: |
+          echo "New version detected! $CURSE_FILENAME"
+          curl -o https://www.curseforge.com/wow/addons/leatrix-plus-classic/files/$CURSE_FILE_ID
+          
 
 
       
