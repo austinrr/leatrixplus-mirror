@@ -66,6 +66,9 @@ jobs:
       MY_FILENAME: ${{ needs.collect-version-information.outputs.MY_FILENAME }}
       CURSE_FILENAME: ${{ needs.collect-version-information.outputs.CURSE_FILENAME }}
       CURSE_FILEID: ${{ needs.collect-version-information.outputs.CURSE_FILEID }}
+
+    outputs:
+      CURSE_FILENAME: ${{ needs.collect-version-information.outputs.CURSE_FILENAME }}
       
     # if: ${{ needs.collect-version-information.outputs.latest_curse_filename != needs.collect-version-information.outputs.latest_curse_fileid }}
     # if: ${{ env.MY_FILENAME != env.CURSE_FILENAME }}
