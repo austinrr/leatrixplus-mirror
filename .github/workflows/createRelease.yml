@@ -99,6 +99,7 @@ jobs:
       CURSE_FILEID: ${{ needs.collect-version-information.outputs.CURSE_FILEID }}
       
     # if: ${{ needs.collect-version-information.outputs.latest_curse_filename != needs.collect-version-information.outputs.latest_curse_fileid }}
+    if: ${{ env.MY_FILENAME != env.CURSE_FILENAME }}
 
     steps:
       - name: Test
@@ -113,7 +114,32 @@ jobs:
         
         run: |
           echo "New version detected! $CURSE_FILENAME"
-          curl -o https://www.curseforge.com/wow/addons/leatrix-plus-classic/files/${CURSE_FILEID}
+          curl https://www.curseforge.com/wow/addons/leatrix-plus-classic/files/${CURSE_FILEID} -o ${CURSE_FILENAME}.zip
+
+      - name: Unzip Addon Package
+        id: unzip_addon_pkg
+        run: unzip "${env.CURSE_FILENAME}.zip"
+
+      - name: Get Interface Version Number
+        id: get_interface_version_num
+        run: |
+          cd Leatrix_Plus/
+          echo "get_interface_version_num=$(cat *.toc | sed -n -E -e 's/^## Interface: ([0-9]+).*/\1/p')" >> "$GITHUB_OUTPUT"
+
+      - name: Set filename in release.json
+        uses: jossef/action-set-json-field@v2.1
+        with:
+          file: release.json
+          field: releases.filename
+          value: $env.CURSE_FILENAME
+
+      - name: Set interface in release.json
+        uses: jossef/action-set-json-field@v2.1
+        with:
+          file: release.json
+          field: releases.metadata.interface
+          value: ${{ steps.get_interface_version_num.outputs.get_interface_version_num }}
+          
           
 
 
