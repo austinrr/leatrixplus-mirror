@@ -102,7 +102,7 @@ jobs:
       - name: Download Newer Version from Curse
         id: donwload-newer-version
 
-        if: env.NEW_VERSION == True
+        if: env.NEW_VERSION == "TRUE"
         
         run: |
           echo "New version detected! $CURSE_FILENAME"
