@@ -134,12 +134,14 @@ jobs:
   
       - name: Make Tag
         id: make-tag
-        run: echo "tag=v$(echo $CURSE_FILENAME | sed 's/.*-\(.*\)-.*/\1/')" >> "GITHUB_OUTPUT"
+        run: |
+          version=$(echo $CURSE_FILENAME | sed 's/.*-\(.*\)-.*/\1/')
+          echo "tag=v$(version)" >> "GITHUB_OUTPUT"
 
       - name: Test
         run: |
-          echo $CURSE_FILENAME
-          echo ${{ steps.make-tag.outputs.tag }}
+          echo Filename $CURSE_FILENAME
+          echo Tag ${{ steps.make-tag.outputs.tag }}
         
       - name: Make Release
         uses: ncipollo/release-action@v1
