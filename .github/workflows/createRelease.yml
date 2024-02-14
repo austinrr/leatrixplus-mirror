@@ -127,14 +127,19 @@ jobs:
       contents: write
 
     env:
-      CURSE_FILENAME: ${{ needs.collect-version-information.outputs.CURSE_FILENAME }}
+      CURSE_FILENAME: ${{ needs.download-newer-version.outputs.CURSE_FILENAME }}
 
     steps:
       - uses: actions/checkout@v3
-    
+  
       - name: Make Tag
         id: make-tag
         run: echo "tag=v$(echo $CURSE_FILENAME | sed 's/.*-\(.*\)-.*/\1/')" >> "GITHUB_OUTPUT"
+
+      - name: Test
+        run: |
+          echo $CURSE_FILENAME
+          echo ${{ steps.make-tag.outputs.tag }}
         
       - name: Make Release
         uses: ncipollo/release-action@v1
