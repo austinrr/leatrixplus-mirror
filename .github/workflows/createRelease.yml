@@ -123,13 +123,6 @@ jobs:
         run: |
           version=$(echo $CURSE_FILENAME | sed 's/.*-\(.*\)-.*/\1/')
           echo "tag=v${version}-classic" >> "$GITHUB_OUTPUT"
-
-      - name: Test
-        if: ${{ env.MY_FILENAME != env.CURSE_FILENAME }}
-        run: |
-          echo Filename $CURSE_FILENAME
-          echo Tag ${{ steps.make-tag.outputs.tag }}
-          ls
         
       - name: Make Release
         if: ${{ env.MY_FILENAME != env.CURSE_FILENAME }}
@@ -137,7 +130,6 @@ jobs:
         with:
           artifacts: "${{ env.CURSE_FILENAME }}.zip,release.json"
           tag: ${{ steps.make-tag.outputs.tag }}
-          draft: true
           
           
         
