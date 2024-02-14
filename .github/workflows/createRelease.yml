@@ -89,16 +89,21 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      MY_VERSION: ${{ needs.collect-version-information.outputs.new_version }}
+      MY_VERSION: ${{ needs.set-envvar-prev-release.outputs.set-envvar-prev-release }}
       CURSE_FILENAME: ${{ needs.collect-version-information.outputs.latest_curse_filename }}
       CURSE_FILE_ID: ${{ needs.collect-version-information.outputs.latest_curse_fileid }}
       
     # if: ${{ needs.collect-version-information.outputs.latest_curse_filename != needs.collect-version-information.outputs.latest_curse_fileid }}
 
     steps:
+      - name: Test
+        run: |
+          echo "MY_VERSION: $MY_VERSION"
+          echo "CURSE_FILENAME: $CURSE_FILENAME"
+          echo "CURSE_FILE_ID: $CURSE_FILE_ID"
+    
       - name: Download Newer Version from Curse
         id: donwload-newer-version
-
         if: ${{ env.MY_VERSION != env.CURSE_FILENAME }}
         
         run: |
