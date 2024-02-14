@@ -135,8 +135,8 @@ jobs:
       - name: Make Tag
         id: make-tag
         run: |
-          version=$(echo $CURSE_FILENAME | sed 's/.*-\(.*\)-.*/\1/')
-          echo "tag=v$(version)" >> "GITHUB_OUTPUT"
+          version=$(echo ${CURSE_FILENAME} | sed 's/.*-\(.*\)-.*/\1/')
+          echo "tag=v$($version)" >> "GITHUB_OUTPUT"
 
       - name: Test
         run: |
