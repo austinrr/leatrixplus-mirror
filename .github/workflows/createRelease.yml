@@ -92,7 +92,7 @@ jobs:
       CURSE_FILENAME: ${{ needs.collect-version-information.outputs.latest_curse_filename }}
       CURSE_FILE_ID: ${{ needs.collect-version-information.outputs.latest_curse_fileid }}
       
-    if: ${{ CURSE_FILENAME != MY_FILENAME }}
+    if: ${{ env.CURSE_FILENAME != env.MY_FILENAME }}
 
     steps:
       - name: Download Newer Version from Curse
