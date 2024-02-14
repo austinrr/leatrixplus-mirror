@@ -73,8 +73,6 @@ jobs:
         
       - name: cUrl Curseforge
         id: curl-curseforge
-        env:
-          MY_VERSION: ${{ steps.set-envvar-prev-release.outputs.prev-release-filename }}
         run: |
           curl -H 'Accept: application/json' \
             'https://www.curseforge.com/api/v1/mods/322362/files?pageIndex=0&pageSize=10&sort=dateCreated&sortDescending=true&gameFlavorId=67408&removeAlphas=true' \
@@ -83,7 +81,6 @@ jobs:
           fileNameFixed=${fileNameRaw%.*}
           echo "latest_curse_fileid=$(cat curse-response.json | jq -r '.data[0].id')" >> "$GITHUB_OUTPUT"
           echo "latest_curse_filename=${fileNameFixed}" >> "$GITHUB_OUTPUT"
-          echo "new_version=$(fileNameFixed != $MY_VERSION)"
   
 
   download-newer-version:
@@ -92,7 +89,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      NEW_VERSION: ${{ needs.collect-version-information.outputs.new_version }}
+      MY_VERSION: ${{ needs.collect-version-information.outputs.new_version }}
       CURSE_FILENAME: ${{ needs.collect-version-information.outputs.latest_curse_filename }}
       CURSE_FILE_ID: ${{ needs.collect-version-information.outputs.latest_curse_fileid }}
       
@@ -102,7 +99,7 @@ jobs:
       - name: Download Newer Version from Curse
         id: donwload-newer-version
 
-        if: env.NEW_VERSION == "TRUE"
+        if: ${{ env.MY_VERSION != env.CURSE_FILENAME }}
         
         run: |
           echo "New version detected! $CURSE_FILENAME"
