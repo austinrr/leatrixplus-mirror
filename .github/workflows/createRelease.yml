@@ -61,14 +61,13 @@ jobs:
     name: Download Newer Verion from CurseForge
     needs: collect-version-information
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     env:
       MY_FILENAME: ${{ needs.collect-version-information.outputs.MY_FILENAME }}
       CURSE_FILENAME: ${{ needs.collect-version-information.outputs.CURSE_FILENAME }}
       CURSE_FILEID: ${{ needs.collect-version-information.outputs.CURSE_FILEID }}
-
-    outputs:
-      CURSE_FILENAME: ${{ needs.collect-version-information.outputs.CURSE_FILENAME }}
       
     # if: ${{ needs.collect-version-information.outputs.latest_curse_filename != needs.collect-version-information.outputs.latest_curse_fileid }}
     # if: ${{ env.MY_FILENAME != env.CURSE_FILENAME }}
@@ -118,33 +117,22 @@ jobs:
           field: releases.metadata.interface
           value: ${{ steps.get_interface_version_num.outputs.get_interface_version_num }}
 
-
-  # Make Release Job
-  make-release:
-    needs: download-newer-version
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-
-    env:
-      CURSE_FILENAME: ${{ needs.download-newer-version.outputs.CURSE_FILENAME }}
-
-    steps:
-      - uses: actions/checkout@v3
-  
       - name: Make Tag
+        if: ${{ env.MY_FILENAME != env.CURSE_FILENAME }}
         id: make-tag
         run: |
           version=$(echo $CURSE_FILENAME | sed 's/.*-\(.*\)-.*/\1/')
           echo "tag=v${version}-classic" >> "$GITHUB_OUTPUT"
 
       - name: Test
+        if: ${{ env.MY_FILENAME != env.CURSE_FILENAME }}
         run: |
           echo Filename $CURSE_FILENAME
           echo Tag ${{ steps.make-tag.outputs.tag }}
           ls
         
       - name: Make Release
+        if: ${{ env.MY_FILENAME != env.CURSE_FILENAME }}
         uses: ncipollo/release-action@v1
         with:
           artifacts: "${{ env.CURSE_FILENAME }}.zip,release.json"
