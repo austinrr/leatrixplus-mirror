@@ -79,16 +79,16 @@ jobs:
             -o curse-response.json
           fileNameRaw=$(cat curse-response.json | jq -r '.data[0].fileName')
           fileNameFixed=${fileNameRaw%.*}
-          echo "latest-curse-fileid=$(cat curse-response.json | jq -r '.data[0].id')" >> "$GITHUB_OUTPUT"
-          echo "latest-curse-filename=${fileNameFixed}" >> "$GITHUB_OUTPUT"
-          echo $latest-curse-fileid
-          echo $latest-curse-filename
+          echo "latest_curse_fileid=$(cat curse-response.json | jq -r '.data[0].id')" >> "$GITHUB_OUTPUT"
+          echo "latest_curse_filename=${fileNameFixed}" >> "$GITHUB_OUTPUT"
+          echo $latest_curse_fileid
+          echo $latest_curse_filename
   
 
       - name: Download Newer Version from Curse
         id: donwload-newer-version
         env:
-          CURSE_FILENAME: ${{ steps.curl-curseforge.outputs.latest-curse-filename }}
+          CURSE_FILENAME: ${{ steps.curl-curseforge.outputs.latest_curse_filename }}
           MY_FILENAME: ${{ steps.set-envvar-prev-release.outputs.prev-release-filename }}
         if: ${{ env.CURSE_FILENAME != env.MY_FILENAME }}
         run: echo "new version detected"
