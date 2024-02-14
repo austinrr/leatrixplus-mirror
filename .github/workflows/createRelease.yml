@@ -106,7 +106,7 @@ jobs:
         uses: jossef/action-set-json-field@v2.1
         with:
           file: release.json
-          field: releases[0].filename
+          field: releases.filename
           value: "${{ env.CURSE_FILENAME }}.zip"
 
       - name: Set interface in release.json
@@ -114,7 +114,7 @@ jobs:
         uses: jossef/action-set-json-field@v2.1
         with:
           file: release.json
-          field: releases[0].metadata[0].interface
+          field: releases.metadata.interface
           value: ${{ steps.get_interface_version_num.outputs.get_interface_version_num }}
 
       - name: Test Verify Json
