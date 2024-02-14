@@ -99,6 +99,7 @@ jobs:
       - name: Test
         run: |
           echo "MY_VERSION: $MY_VERSION"
+          echo "NEEDS VERSION: ${{ needs.set-envvar-prev-release.outputs.set-envvar-prev-release }}"
           echo "CURSE_FILENAME: $CURSE_FILENAME"
           echo "CURSE_FILE_ID: $CURSE_FILE_ID"
     
