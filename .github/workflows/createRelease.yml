@@ -77,9 +77,8 @@ jobs:
           curl -H 'Accept: application/json' \
             'https://www.curseforge.com/api/v1/mods/322362/files?pageIndex=0&pageSize=10&sort=dateCreated&sortDescending=true&gameFlavorId=67408&removeAlphas=true' \
             -o curse-response.json
-          echo "latest-curse-filename=$(cat curse-response.json | jq -r '.data[0].fileName')"
           echo "latest-curse-fileid=$(cat curse-response.json | jq -r '.data[0].id')" >> "$GITHUB_OUTPUT"
-          echo "latest-curse-filename=${$latest-curse-filename%.*}" >> "$GITHUB_OUTPUT"
+          echo "latest-curse-filename=${(cat curse-response.json | jq -r '.data[0].fileName')%.*}" >> "$GITHUB_OUTPUT"
   
 
       - name: Download Newer Version from Curse
