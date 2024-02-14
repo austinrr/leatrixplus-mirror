@@ -79,7 +79,7 @@ jobs:
             -o curse-response.json
           latest-curse-filename=$(cat curse-response.json | jq -r '.data[0].fileName')
           echo "latest-curse-fileid=$(cat curse-response.json | jq -r '.data[0].id')" >> "$GITHUB_OUTPUT"
-          echo "${latest-curse-filename%.*}" >> "$GITHUB_OUTPUT"
+          echo "latest-curse-filename=${$latest-curse-filename%.*}" >> "$GITHUB_OUTPUT"
   
 
       - name: Download Newer Version from Curse
