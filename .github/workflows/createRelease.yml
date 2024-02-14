@@ -73,6 +73,7 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
+      - uses: ncipollo/release-action@v1
       
       - name: Test
         run: |
@@ -86,9 +87,6 @@ jobs:
         run: |
           echo "New version detected! $CURSE_FILENAME"
           curl -O https://mediafilez.forgecdn.net/files/${CURSE_FILEID:0:4}/${CURSE_FILEID:4:3}/${CURSE_FILENAME}.zip
-
-      - name: LS
-        run: ls
       
       - name: Unzip Addon Package
         id: unzip_addon_pkg
@@ -117,7 +115,34 @@ jobs:
           file: release.json
           field: releases.metadata.interface
           value: ${{ steps.get_interface_version_num.outputs.get_interface_version_num }}
+
+
+  # Make Release Job
+  make-release:
+    needs: download-newer-version
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    env:
+      CURSE_FILENAME: ${{ needs.collect-version-information.outputs.CURSE_FILENAME }}
+
+    steps:
+      - name: Make Tag
+        id: make-tag
+        run: echo "tag=v$(echo $CURSE_FILENAME | sed 's/.*-\(.*\)-.*/\1/')" >> "GITHUB_OUTPUT"
+        
+      - name: Make Release
+        uses:
+          actions/checkout@v3
+          ncipollo/release-action@v1
+        with:
+          artifacts: "${CURSE_FILENAME},release.json"
+          tag: ${{ steps.make-tag.outputs.tag }}
           
+          
+        
+        
           
 
 
