@@ -87,7 +87,9 @@ jobs:
       - name: Unzip Addon Package
         id: unzip_addon_pkg
         if: ${{ env.MY_FILENAME != env.CURSE_FILENAME }}
-        run: unzip ${env.CURSE_FILENAME}.zip
+        run: |
+          filename="${env.CURSE_FILENAME}.zip"
+          unzip $filename
 
       - name: Get Interface Version Number
         id: get_interface_version_num
