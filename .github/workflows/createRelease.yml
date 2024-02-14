@@ -30,9 +30,9 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
       
-      - name: Get Latest Zip
-        id: get_latest_zip
-        run: echo "LATEST_FILE_NAME=$(ls -rt *.zip | head -1)" >> "$GITHUB_OUTPUT"
+      #- name: Get Latest Zip
+      #  id: get_latest_zip
+      #  run: echo "LATEST_FILE_NAME=$(ls -rt *.zip | head -1)" >> "$GITHUB_OUTPUT"
 
       - name: Get Previous Release JSON Asset
         uses: robinraju/release-downloader@v1.9
@@ -71,6 +71,9 @@ jobs:
     # if: ${{ env.MY_FILENAME != env.CURSE_FILENAME }}
 
     steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v3
+      
       - name: Test
         run: |
           echo "MY_FILENAME: $MY_FILENAME"
