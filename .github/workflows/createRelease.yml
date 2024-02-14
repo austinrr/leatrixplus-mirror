@@ -16,7 +16,7 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
-  build:
+  collect-version-information:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
         
@@ -60,18 +60,16 @@ jobs:
           field: releases.metadata.interface
           value: ${{ steps.get_interface_version_num.outputs.get_interface_version_num }}
 
-      - name: Test Read release.json
-        run: cat release.json
-
-      - name: Get Last Release
+      - name: Get Previous Release JSON Asset
         uses: robinraju/release-downloader@v1.9
         with:
           latest: true
           filename: release.json
           out-file-path: "previous-release"
 
-      - name: Test Read Previous Release
-        run: cat previous-release/release.json
+      - name: Set Env Var for Previous Release
+        id: set-envvar-prev-release
+        run: echo "prev-release-filename=$(cat previous-release/release.json | jq '.releases[0].filename')"
         
       - name: cUrl Curseforge
         id: curl-curseforge
@@ -79,22 +77,19 @@ jobs:
           curl -H 'Accept: application/json' \
             'https://www.curseforge.com/api/v1/mods/322362/files?pageIndex=0&pageSize=10&sort=dateCreated&sortDescending=true&gameFlavorId=67408&removeAlphas=true' \
             -o curse-response.json
-          echo "curse-version=$(cat curse-response.json | jq '.data[0].fileName')"
+          echo "latest-curse-filename=$(cat curse-response.json | jq '.data[0].fileName')"
+          echo "latest-curse-fileid=$(cat curse-response.json | jq '.data[0].id')"
 
-      - name: test cUrl Curseforge
-        run: cat curse-response.json
-       # run: echo "${{ steps.curl-curseforge.outputs.response }}"
+      - name: Download Newer Version from Curse
+        id: donwload-newer-version
+        env:
+          CURSE_FILENAME: ${{ steps.curl-curseforge.outputs.latest-curse-filename }}
+          MY_FILENAME: ${{ steps.set-envvar-prev-release.outputs.prev-release-filename }}
+        if: $CURSE_FILENAME != MY_FILENAME
+        run: echo "new version detected"
 
-          
-          
-   #   - name: cUrl Curseforge
-    #    run: |
-     #     echo "JSON_RESPONSE<<EOF" >> $GITHUB_ENV
-      #    curl -sb -H 'Accept: application/json' 'https://www.curseforge.com/api/v1/mods/322362/files?pageIndex=0&pageSize=10&sort=dateCreated&sortDescending=true&gameFlavorId=67408&removeAlphas=true' >> GITHUB_ENV
-       #   echo "EOF" >> $GITHUB_ENV
-        #  echo "{{ env.JSON_RESPONSE }}"
-        # echo "latest_release_json=${{ fromJson(env.JSON_RESPONSE).data[0] }}"
-          
+
+      
 
         
         
