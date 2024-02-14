@@ -85,7 +85,7 @@ jobs:
         env:
           CURSE_FILENAME: ${{ steps.curl-curseforge.outputs.latest-curse-filename }}
           MY_FILENAME: ${{ steps.set-envvar-prev-release.outputs.prev-release-filename }}
-        if: $CURSE_FILENAME != MY_FILENAME
+        if: ${{ env.CURSE_FILENAME != env.MY_FILENAME }}
         run: echo "new version detected"
 
 
