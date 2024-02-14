@@ -103,9 +103,9 @@ jobs:
     steps:
       - name: Test
         run: |
-          echo "MY_VERSION: $MY_VERSION"
+          echo "MY_FILENAME: $MY_FILENAME"
           echo "CURSE_FILENAME: $CURSE_FILENAME"
-          echo "CURSE_FILE_ID: $CURSE_FILEID"
+          echo "CURSE_FILEID: $CURSE_FILEID"
     
       - name: Download Newer Version from Curse
         id: donwload-newer-version
