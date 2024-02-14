@@ -113,7 +113,7 @@ jobs:
         
         run: |
           echo "New version detected! $CURSE_FILENAME"
-          curl -o https://www.curseforge.com/wow/addons/leatrix-plus-classic/files/$CURSE_FILEID
+          curl -o https://www.curseforge.com/wow/addons/leatrix-plus-classic/files/${CURSE_FILEID}
           
 
 
