@@ -123,10 +123,9 @@ jobs:
           NEW_INTERFACE: ${{ steps.get_interface_version_num.outputs.get_interface_version_num }}
         run: |
           temp="$(\
-            jq --arg FILENAME "$CURSE_FILENAME" --arg INTERFACE "$NEW_INTERFACE" '\
-            .releases[0].filename |= $FILENAME | \
-            .releases[0].metadata[0].interface |= $INTERFACE' release.json)" \
-          && echo "${temp}" > release.json'
+            jq --arg FILENAME "$CURSE_FILENAME" --arg INTERFACE "$NEW_INTERFACE" \
+            '.releases[0].filename |= $FILENAME | .releases[0].metadata[0].interface |= $INTERFACE' release.json)" \
+            && echo "${temp}" > release.json
 
       - name: Test Verify Json
         if: ${{ env.MY_FILENAME != env.CURSE_FILENAME }}
