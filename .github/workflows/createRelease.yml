@@ -43,7 +43,7 @@ jobs:
 
       - name: Set Env Var for Previous Release
         id: set-envvar-prev-release
-        run: echo "prev-release-filename=$(cat previous-release/release.json | jq '.releases[0].filename')" >> "$GITHUB_OUTPUT"
+        run: echo "prev-release-filename=$(cat previous-release/release.json | jq -r '.releases[0].filename')" >> "$GITHUB_OUTPUT"
         
       - name: cUrl Curseforge
         id: curl-curseforge
@@ -69,9 +69,6 @@ jobs:
       CURSE_FILENAME: ${{ needs.collect-version-information.outputs.CURSE_FILENAME }}
       CURSE_FILEID: ${{ needs.collect-version-information.outputs.CURSE_FILEID }}
       
-    # if: ${{ needs.collect-version-information.outputs.latest_curse_filename != needs.collect-version-information.outputs.latest_curse_fileid }}
-    # if: ${{ env.MY_FILENAME != env.CURSE_FILENAME }}
-
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
@@ -100,22 +97,6 @@ jobs:
         run: |
           cd Leatrix_Plus/
           echo "get_interface_version_num=$(cat *.toc | sed -n -E -e 's/^## Interface: ([0-9]+).*/\1/p')" >> "$GITHUB_OUTPUT"
-
-      # - name: Set filename in release.json
-      #   if: ${{ env.MY_FILENAME != env.CURSE_FILENAME }}
-      #   uses: jossef/action-set-json-field@v2.1
-      #   with:
-      #     file: release.json
-      #     field: releases.filename
-      #     value: "${{ env.CURSE_FILENAME }}.zip"
-
-      # - name: Set interface in release.json
-      #   if: ${{ env.MY_FILENAME != env.CURSE_FILENAME }}
-      #   uses: jossef/action-set-json-field@v2.1
-      #   with:
-      #     file: release.json
-      #     field: releases.metadata.interface
-      #     value: ${{ steps.get_interface_version_num.outputs.get_interface_version_num }}
 
       - name: Update release.json
         if: ${{ env.MY_FILENAME != env.CURSE_FILENAME }}
