@@ -107,8 +107,9 @@ jobs:
         env:
           NEW_INTERFACE: ${{ steps.get_interface_version_num.outputs.get_interface_version_num }}
         run: |
+          FULLFILE_NAME="${CURSE_FILENAME}.zip"
           temp="$(\
-            jq --arg FILENAME "$CURSE_FILENAME" --arg INTERFACE "$NEW_INTERFACE" \
+            jq --arg FILENAME "$FULLFILE_NAME" --arg INTERFACE "$NEW_INTERFACE" \
             '.releases[0].filename |= $FILENAME | .releases[0].metadata[0].interface |= $INTERFACE' release.json)" \
             && echo "${temp}" > release.json
 
