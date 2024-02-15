@@ -118,7 +118,7 @@ jobs:
         id: make-tag
         run: |
           version=$(echo $CURSE_FILENAME | sed 's/.*-\(.*\)-.*/\1/')
-          echo "tag=v${version}-classic" >> "$GITHUB_OUTPUT"
+          echo "tag=v${version}" >> "$GITHUB_OUTPUT"
         
       - name: Make Release
         if: ${{ env.MY_FILENAME != env.CURSE_FILENAME }}
