@@ -101,21 +101,32 @@ jobs:
           cd Leatrix_Plus/
           echo "get_interface_version_num=$(cat *.toc | sed -n -E -e 's/^## Interface: ([0-9]+).*/\1/p')" >> "$GITHUB_OUTPUT"
 
-      - name: Set filename in release.json
-        if: ${{ env.MY_FILENAME != env.CURSE_FILENAME }}
-        uses: jossef/action-set-json-field@v2.1
-        with:
-          file: release.json
-          field: releases.filename
-          value: "${{ env.CURSE_FILENAME }}.zip"
+      # - name: Set filename in release.json
+      #   if: ${{ env.MY_FILENAME != env.CURSE_FILENAME }}
+      #   uses: jossef/action-set-json-field@v2.1
+      #   with:
+      #     file: release.json
+      #     field: releases.filename
+      #     value: "${{ env.CURSE_FILENAME }}.zip"
 
-      - name: Set interface in release.json
+      # - name: Set interface in release.json
+      #   if: ${{ env.MY_FILENAME != env.CURSE_FILENAME }}
+      #   uses: jossef/action-set-json-field@v2.1
+      #   with:
+      #     file: release.json
+      #     field: releases.metadata.interface
+      #     value: ${{ steps.get_interface_version_num.outputs.get_interface_version_num }}
+
+      - name: Update release.json
         if: ${{ env.MY_FILENAME != env.CURSE_FILENAME }}
-        uses: jossef/action-set-json-field@v2.1
-        with:
-          file: release.json
-          field: releases.metadata.interface
-          value: ${{ steps.get_interface_version_num.outputs.get_interface_version_num }}
+        env:
+          NEW_INTERFACE: ${{ steps.get_interface_version_num.outputs.get_interface_version_num }}
+        run: |
+          temp="$(\
+            jq --arg FILENAME "$CURSE_FILENAME" --arg INTERFACE "$NEW_INTERFACE" '\
+            .releases[0].filename |= $FILENAME | \
+            .releases[0].metadata[0].interface |= $INTERFACE' release.json)" \
+          && echo "${temp}" > release.json'
 
       - name: Test Verify Json
         if: ${{ env.MY_FILENAME != env.CURSE_FILENAME }}
