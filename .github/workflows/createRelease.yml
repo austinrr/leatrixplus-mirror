@@ -1,23 +1,30 @@
-# This is a basic workflow to help you get started with Actions
+# A workflow that checkes the most recent LeatrixPlus-Classic relase on CurseForge that 
+# is different than the LeatricPlus-Classic verion included in this repo's release artifacts.
+# If the release is different it will download the one from CurseForge, generate a new release.json file
+# and package those assets together in a new release using the verion number as the tag and release name.
+#
+# The reason for all of this is because LeatrixPlus-Classic is not hosted on a public repo nor does it have a relase.json
 
 name: CI
 
 # Controls when the workflow will run
 on:
   # Triggers the workflow on push or pull request events but only for the "main" branch
+  # Triggers on a cron schedule that runs at 5 past every 2 hours.
   push:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
+  schedule:
+        - cron: "5 */2 * * *"
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
+  # Collect info from previous release & get file name of most recent release on CurseForge
   collect-version-information:
-    # The type of runner that the job will run on
+    name: Collect Information
     runs-on: ubuntu-latest
 
     outputs:
@@ -25,15 +32,11 @@ jobs:
       CURSE_FILENAME: ${{ steps.curl-curseforge.outputs.latest_curse_filename }}
       CURSE_FILEID: ${{ steps.curl-curseforge.outputs.latest_curse_fileid }}
         
-    # Get Version of Last Release
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
-      
-      #- name: Get Latest Zip
-      #  id: get_latest_zip
-      #  run: echo "LATEST_FILE_NAME=$(ls -rt *.zip | head -1)" >> "$GITHUB_OUTPUT"
 
+      # An action that will pull the release.json asset from the previous release into the working directory as 'previous-release.json'
       - name: Get Previous Release JSON Asset
         uses: robinraju/release-downloader@v1.9
         with:
@@ -58,7 +61,7 @@ jobs:
 
   # Download Job
   download-newer-version:
-    name: Download Newer Verion from CurseForge
+    name: Download from CurseForge
     needs: collect-version-information
     runs-on: ubuntu-latest
     permissions:
@@ -73,11 +76,12 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
       
-      - name: Test
+      - name: Print Troubleshooting Info
         run: |
           echo "MY_FILENAME: $MY_FILENAME"
           echo "CURSE_FILENAME: $CURSE_FILENAME"
           echo "CURSE_FILEID: $CURSE_FILEID"
+          echo "The following steps should be 'skipped' if 'MY_FILENAME' == 'CURSE_FILENAME'"
     
       - name: Download Newer Version from Curse
         id: donwload-newer-version
@@ -108,10 +112,6 @@ jobs:
             '.releases[0].filename |= $FILENAME | .releases[0].metadata[0].interface |= $INTERFACE' release.json)" \
             && echo "${temp}" > release.json
 
-      - name: Test Verify Json
-        if: ${{ env.MY_FILENAME != env.CURSE_FILENAME }}
-        run: cat release.json | jq '.'
-
       - name: Make Tag
         if: ${{ env.MY_FILENAME != env.CURSE_FILENAME }}
         id: make-tag
@@ -125,6 +125,7 @@ jobs:
         with:
           artifacts: "${{ env.CURSE_FILENAME }}.zip,release.json"
           tag: ${{ steps.make-tag.outputs.tag }}
+          latest: true
           
           
         
