@@ -46,7 +46,10 @@ jobs:
 
       - name: Set Env Var for Previous Release
         id: set-envvar-prev-release
-        run: echo "prev-release-filename=$(cat previous-release/release.json | jq -r '.releases[0].filename')" >> "$GITHUB_OUTPUT"
+        run: echo "prev-release-filename=$(\
+          cat previous-release/release.json | \
+          jq -r '.releases[0].filename | \
+          sed 's/\.zip//'')" >> "$GITHUB_OUTPUT"
         
       - name: cUrl Curseforge
         id: curl-curseforge
