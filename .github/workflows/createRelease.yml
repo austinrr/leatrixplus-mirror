@@ -92,8 +92,7 @@ jobs:
         if: ${{ env.MY_FILENAME != env.CURSE_FILENAME }}
         run: |
           echo "New version detected! $CURSE_FILENAME"
-          curl -O https://mediafilez.forgecdn.net/files/${CURSE_FILEID:0:4}/${CURSE_FILEID:4:3}/${CURSE_FILENAME}.zip
-          echo $(ls)
+          curl -O https://mediafilez.forgecdn.net/files/${CURSE_FILEID:0:4}/${CURSE_FILEID:5:2}/${CURSE_FILENAME}.zip
       
       - name: Unzip Addon Package
         id: unzip_addon_pkg
