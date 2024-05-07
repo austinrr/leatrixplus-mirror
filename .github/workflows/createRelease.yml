@@ -92,7 +92,10 @@ jobs:
         if: ${{ env.MY_FILENAME != env.CURSE_FILENAME }}
         run: |
           echo "New version detected! $CURSE_FILENAME"
-          curl -O https://mediafilez.forgecdn.net/files/${CURSE_FILEID:0:4}/${CURSE_FILEID:4:3}/${CURSE_FILENAME}.zip
+          tmp=${CURSE_FILEID:4:3}
+          echo https://mediafilez.forgecdn.net/files/${CURSE_FILEID:0:4}/${tmp#${tmp%%[!0]*}}/${fileNameFixed}.zip
+          # trim the leading 0s from the substring using ${tmp#${tmp%%[!0]*}}
+          curl -O https://mediafilez.forgecdn.net/files/${CURSE_FILEID:0:4}/${tmp#${tmp%%[!0]*}}/${CURSE_FILENAME}.zip
       
       - name: Unzip Addon Package
         id: unzip_addon_pkg
