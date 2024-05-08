@@ -34,7 +34,7 @@ jobs:
         
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       # An action that will pull the release.json asset from the previous release into the working directory as 'previous-release.json'
       - name: Get Previous Release JSON Asset
@@ -78,7 +78,7 @@ jobs:
       
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       
       - name: Print Troubleshooting Info
         run: |
